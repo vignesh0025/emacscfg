@@ -1,15 +1,5 @@
 (setq inhibit-startup-message t)
 
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(set-fringe-mode 10) ; Give some breathing space
-
-(set-face-attribute 'default nil :font "Hack Nerd Font" :height 110)
-
-;; I mindlessly press ESC, so stop me from wreaking havoc
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-
 ;; C-x z (OR) M-x repeat RET -> repeats last operation
 ;; M-g g (OR) M-g M-g -> goto line:
 
@@ -20,82 +10,71 @@
 ;; C-x C-x -> highlight last selected region (same as "gv" in vim)
 ;; When region is selected: C-x C-c -> moves to start/end of slection
 
-(setq user-emacs-directory "~/.emacs.d")
-(setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
+(defvar better-gc-cons-threshold 134217728); 128mb
 
-;; Install package manager that actually installs the packages
-(setq package-enable-at-startup nil)
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-	"straight/repos/straight.el/bootstrap.el"
-	(or (bound-and-true-p straight-base-dir)
-	    user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-	 'silent 'inhibit-cookies)
-      (goto-char (point-max)):
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold better-gc-cons-threshold)
+            (setq file-name-handler-alist file-name-handler-alist-original)
+            (makunbound 'file-name-handler-alist-original)))
 
-; This is very essential
-(straight-use-package 'no-littering)
+;; Auto Garbage Collection
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (if (boundp 'after-focus-change-function)
+                (add-function :after after-focus-change-function
+                              (lambda ()
+                                (unless (frame-focus-state)
+                                  (garbage-collect))))
+              (add-hook 'after-focus-change-function 'garbage-collect))
+            (defun gc-minibuffer-setup-hook ()
+              (setq gc-cons-threshold (* better-gc-cons-threshold 2)))
 
-(setq auto-save-file-name-transforms `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+            (defun gc-minibuffer-exit-hook ()
+              (garbage-collect)
+              (setq gc-cons-threshold better-gc-cons-threshold))
 
+            (add-hook 'minibuffer-setup-hook #'gc-minibuffer-setup-hook)
+            (add-hook 'minibuffer-exit-hook #'gc-minibuffer-exit-hook)))
 
-;; This installs the use-package to manage the plugins and configuration
-(straight-use-package 'use-package)
-(straight-use-package 'el-patch)
+;; Setup paths to load files
+(defun update-to-load-path (folder)
+  "Update FOLDER and its subdirectories to `load-path'."
+  (let ((base folder))
+    (unless (member base load-path)
+      (add-to-list 'load-path base))
+    (dolist (f (directory-files base))
+      (let ((name (concat base "/" f)))
+        (when (and (file-directory-p name)
+                   (not (equal f ".."))
+                   (not (equal f ".")))
+          (unless (member base load-path)
+            (add-to-list 'load-path name)))))))
+
+(update-to-load-path (expand-file-name "elisp" user-emacs-directory))
+
+(require 'init-options)
+
+(require 'init-modemap)
+
+(require 'init-elpaca)
+
+(require 'init-littering)
+
+(use-package el-patch
+  :ensure t)
+
+(require 'init-evil)
 
 (use-package org
-  :straight t
-  :ensure t
-  )
-
-;; The following will be always have Emacs mode by default
-(defun vd/evil-hook ()
-  (dolist (mode '(custom-mode
-		  eshell-mode
-		  git-rebase-mode
-		  erc-mode
-		  circa-server-mode
-		  circa-chat-mode
-		  sauron-mode
-		  term-mode))
-    (add-to-list 'evil-emacs-state-modes mode)))
-
-;; use C-Z to toggle evil and emacs mode
-(use-package evil
-  :straight t
-  :demand t ;; Autoload on start. Don't do lazyload
-  :init
-  (setq evil-want-integration t) ;; TODO: Check if this are still applicable
-  (setq evil-want-keybinding nil) ;; TODO: Check if this are still applicable
-  :hook (evil-mode . vd/evil-hook)
-  :config
-  (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state) ;Exit to normal mode using C-g (EMACS World)
-  )
-
-;; EVIL mode integration i.e. keybindings for other modes such as calender
-(use-package evil-collection
-  :straight t
-  :after evil
-  :config
-  (evil-collection-init))
+  :ensure t)
 
 ;; M-x all-the-icons-install-fonts is required to actually install the icons
 (use-package all-the-icons
-  :straight t
   :ensure t
   )
 
 (use-package doom-modeline
-  :straight t
   :ensure t ;; Make sure its installed if its not installed
   :init
   (doom-modeline-mode 1)
@@ -103,13 +82,13 @@
   )
 
 (use-package rainbow-delimiters
-  :straight t
+  :ensure t
   :hook  (prog-mode . rainbow-delimiters-mode)
   )
 
 ;; Try IVY !!!!
 (use-package helm
-  :straight t
+  :ensure t
   :init
   (setq completion-styles '(flex))
   :config
@@ -119,73 +98,59 @@
   )
 
 (use-package helm-rg
-  :straight t
   :ensure t
   )
 
 (use-package projectile
-  :straight t
+  :ensure t
   :demand t
   :config
   (projectile-mode +1)
   )
 
 (use-package helm-projectile
-  :straight t
+  :ensure t
   :demand t
   :config
   (helm-projectile-on)
   )
 
-(use-package magit
-  :straight t
-  :demand t
-  )
+(require 'init-git)
 
 (use-package lsp-mode
-  :straight t
+  :ensure t
   :commands lsp)
 
 (use-package lsp-ui
-  :straight t
+  :ensure t
   :commands lsp-ui-mode)
 
 (use-package ccls
-  :straight t
+  :ensure t
   :hook ((c-mode c++-mode objc-mode cuda-mode) .
 	 (lambda () (require 'ccls) (lsp))))
 
 (use-package anti-zenburn-theme
-  :straight t
+  :ensure t
+  :disabled
   :config
   (load-theme `anti-zenburn t) ; t is required to trust this theme without saying we need to trust this
   )
 
 (use-package doom-themes
-  :straight t
+  :disabled
+  :ensure t)
+
+(use-package spacemacs-theme
   :ensure t
-  )
-
-
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("2721b06afaf1769ef63f942bf3e977f208f517b187f2526f0e57c1bd4a000350" "df6dfd55673f40364b1970440f0b0cb8ba7149282cf415b81aaad2d98b0f0290" "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" "4ade6b630ba8cbab10703b27fd05bb43aaf8a3e5ba8c2dc1ea4a2de5f8d45882" "7ec8fd456c0c117c99e3a3b16aaf09ed3fb91879f6601b1ea0eeaee9c6def5d9" "e4a702e262c3e3501dfe25091621fe12cd63c7845221687e36a79e17cf3a67e0" "81f53ee9ddd3f8559f94c127c9327d578e264c574cda7c6d9daddaec226f87bb" "c7737b9fc3471779c8e51ea0a37834d24aa80a0d6a79b215e7501227ada39855" default))
- '(helm-minibuffer-history-key "M-p"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+  :config
+  (load-theme `spacemacs-light t)
+  (load-theme `spacemacs-dark t)
  )
 
 ;; Keymap related things in one place
 (use-package which-key
-  :straight t
+  :ensure t
   :init (which-key-mode)
   :diminish which-key-mode
   :config
@@ -193,7 +158,6 @@
   )
 
 (use-package general
-  :straight t
   :ensure t
   :config
   (general-evil-setup t)
@@ -205,9 +169,11 @@
   )
 
 (use-package hydra
-  :straight t
   :ensure t
   )
+
+(elpaca-wait)
+
 
 (defhydra hydra-zoom (:timeout 3 global-map "<f2>")
   "Zoom"
@@ -230,8 +196,8 @@
     ("q" nil "quit")
     )
 
-(defvar whitespace-mode nil)
-(defvar display-line-numbers-mode nil)
+; (defvar whitespace-mode nil)
+; (defvar display-line-numbers-mode nil)
 (defhydra hydra-toggle (:color red)
   "
 _a_ abbrev-mode:       %`abbrev-mode
@@ -269,3 +235,7 @@ _w_ whitespace-mode:   %`whitespace-mode
   "hb" '(hydra-buffer/body :which-key "Navigate Buffer")
   "he" '(hydra-error/body :which-key "Errors")
   )
+
+
+;; I mindlessly press ESC, so stop me from wreaking havoc
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
