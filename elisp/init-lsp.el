@@ -14,8 +14,8 @@
 (use-package ccls
   :ensure t
   :config
-  (if (bound-and-true-p vd-ccls-exec-d)
-      (setq ccls-executable ""))
+  (if (bound-and-true-p vd-ccls-exec)
+      (setq ccls-executable vd-ccls-exec))
   :hook ((c-mode c++-mode objc-mode cuda-mode) .
 	 (lambda () (require 'ccls) (lsp))))
 
