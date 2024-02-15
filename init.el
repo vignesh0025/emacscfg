@@ -1,5 +1,6 @@
 (setq inhibit-startup-message t)
 
+
 ;; C-x z (OR) M-x repeat RET -> repeats last operation
 ;; M-g g (OR) M-g M-g -> goto line:
 
@@ -9,7 +10,6 @@
 
 ;; C-x C-x -> highlight last selected region (same as "gv" in vim)
 ;; When region is selected: C-x C-c -> moves to start/end of slection
-
 (defvar better-gc-cons-threshold 134217728); 128mb
 
 (add-hook 'emacs-startup-hook
@@ -51,7 +51,12 @@
           (unless (member base load-path)
             (add-to-list 'load-path name)))))))
 
+(update-to-load-path user-emacs-directory)
 (update-to-load-path (expand-file-name "elisp" user-emacs-directory))
+
+(if (require 'init-override nil t)
+    (message "overriding...")
+  (message "no override"))
 
 (require 'init-options)
 
@@ -119,18 +124,7 @@
 
 (require 'init-treesit)
 
-(use-package lsp-mode
-  :ensure t
-  :commands lsp)
-
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode)
-
-(use-package ccls
-  :ensure t
-  :hook ((c-mode c++-mode objc-mode cuda-mode) .
-	 (lambda () (require 'ccls) (lsp))))
+(require 'init-lsp)
 
 (use-package anti-zenburn-theme
   :ensure t
