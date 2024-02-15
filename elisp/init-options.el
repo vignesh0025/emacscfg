@@ -4,7 +4,9 @@
 			   (fullscreen . maximized)
 			   ))
 
-(set-face-attribute 'default nil :font "Hack" :height 110)
+
+
+(set-face-attribute 'default nil :font "Hack" :height (if (boundp 'vd-font-sz) vd-font-sz 110))
 
 (add-hook 'emacs-startup-hook
 	  (lambda ()

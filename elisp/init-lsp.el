@@ -15,8 +15,9 @@
   :ensure t
   :config
   (if (bound-and-true-p vd-ccls-exec)
-      (setq ccls-executable vd-ccls-exec))
-  :hook ((c-mode c++-mode objc-mode cuda-mode) .
+      (setq ccls-executable vd-ccls-exec)
+    (message "WARNING: ccls-executable -not-set"))
+  :hook ((c-mode c-ts-mode c++-mode c++-ts-mode objc-mode cuda-mode) .
 	 (lambda () (require 'ccls) (lsp))))
 
 (use-package flycheck
