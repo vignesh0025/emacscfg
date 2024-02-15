@@ -117,6 +117,8 @@
 
 (require 'init-git)
 
+(require 'init-treesit)
+
 (use-package lsp-mode
   :ensure t
   :commands lsp)
