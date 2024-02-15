@@ -37,27 +37,6 @@
             (add-hook 'minibuffer-setup-hook #'gc-minibuffer-setup-hook)
             (add-hook 'minibuffer-exit-hook #'gc-minibuffer-exit-hook)))
 
-;; Setup paths to load files
-(defun update-to-load-path (folder)
-  "Update FOLDER and its subdirectories to `load-path'."
-  (let ((base folder))
-    (unless (member base load-path)
-      (add-to-list 'load-path base))
-    (dolist (f (directory-files base))
-      (let ((name (concat base "/" f)))
-        (when (and (file-directory-p name)
-                   (not (equal f ".."))
-                   (not (equal f ".")))
-          (unless (member base load-path)
-            (add-to-list 'load-path name)))))))
-
-(update-to-load-path user-emacs-directory)
-(update-to-load-path (expand-file-name "elisp" user-emacs-directory))
-
-(if (require 'init-override nil t)
-    (message "overriding...")
-  (message "no override"))
-
 (require 'init-options)
 
 (require 'init-modemap)

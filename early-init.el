@@ -1,5 +1,23 @@
-(setenv "LIBRARY_PATH" "/home/vignesh/Documents/emacs/gcc-install/lib64/gcc/x86_64-pc-linux-gnu/13.2.0:/home/vignesh/Documents/emacs/gcc-install/lib64")
-(setq native-comp-async-report-warnings-errors nil)
+;; Setup paths to load files
+(defun update-to-load-path (folder)
+  "Update FOLDER and its subdirectories to `load-path'."
+  (let ((base folder))
+    (unless (member base load-path)
+      (add-to-list 'load-path base))
+    (dolist (f (directory-files base))
+      (let ((name (concat base "/" f)))
+        (when (and (file-directory-p name)
+                   (not (equal f ".."))
+                   (not (equal f ".")))
+          (unless (member base load-path)
+            (add-to-list 'load-path name)))))))
+
+(update-to-load-path user-emacs-directory)
+(update-to-load-path (expand-file-name "elisp" user-emacs-directory))
+
+(if (require 'init-override nil t)
+    (message "overriding...")
+  (message "no override"))
 
 (setq gc-cons-threshold 100000000)
 
