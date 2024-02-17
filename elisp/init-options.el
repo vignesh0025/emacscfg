@@ -1,15 +1,12 @@
 ; Font options
-(setq default-frame-list '(
-			   (font . "Hack-15")
-			   (fullscreen . maximized)
-			   ))
-
-
+(add-to-list 'default-frame-alist '(font . "Hack-11"))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (set-face-attribute 'default nil :font "Hack" :height (if (boundp 'vd-font-sz) vd-font-sz 110))
 
 (add-hook 'emacs-startup-hook
 	  (lambda ()
+	    (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 	    ))
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
