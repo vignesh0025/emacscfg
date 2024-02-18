@@ -116,6 +116,12 @@
   (helm-projectile-on)
   )
 
+(use-package helm-themes
+  :ensure t)
+
+(use-package helm-xref
+  :ensure t)
+
 (require 'init-git)
 
 (require 'init-treesit)
@@ -228,7 +234,7 @@ _w_ whitespace-mode:   %`whitespace-mode
   "hb" '(hydra-buffer/body :which-key "Navigate Buffer")
   "he" '(hydra-error/body :which-key "Errors")
 
-  "g" '(:ingore t :which-key "Git Operations")
+  "g" '(:ignore t :which-key "Git Operations")
   "gi" '(git-gutter:statistic :which-key "GitGutter Statistics")
   "gr" '(git-gutter:revert-hunk :which-key "GitGutter Revert Change")
   "gd" '(git-gutter:popup-hunk :which-key "GitGutter Popup Change")
@@ -237,6 +243,9 @@ _w_ whitespace-mode:   %`whitespace-mode
   "gl" '(magit-log :which-key "Show log")
   "gb" '(magit-blame :which-key "Blame File")
 
+  "l"  '(:ignore t :which-key "LSP Operations")
+  "lr" '(lsp-workspace-restart :which-key  "Restart LSP")
+  "lh" '(lsp-describe-session :which-key "LSP Describe Session")
   )
 
 
