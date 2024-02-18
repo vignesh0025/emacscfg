@@ -38,6 +38,8 @@
 (elpaca elpaca-use-package
   (elpaca-use-package-mode))
 
+(setq use-package-always-ensure t)
+
 (elpaca-wait)
 
 (provide 'init-elpaca)

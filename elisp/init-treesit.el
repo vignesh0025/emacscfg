@@ -9,6 +9,7 @@
 	  (json "https://github.com/tree-sitter/tree-sitter-json")
 	  (make "https://github.com/alemuller/tree-sitter-make")
 	  (python "https://github.com/tree-sitter/tree-sitter-python")
+	  (verilog "https://github.com/tree-sitter/tree-sitter-verilog")
 	  ))
 
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
@@ -20,5 +21,8 @@
     (vd/treesit-config))
 
 ;; (treesit-language-available-p 'c) ; returns if c grammer is available and can be loaded
+
+(use-package verilog-ts-mode
+  :ensure t)
 
 (provide 'init-treesit)

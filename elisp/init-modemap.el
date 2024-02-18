@@ -10,6 +10,7 @@
 (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
 (add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+(add-to-list 'major-mode-remap-alist '(verilog-mode . verilog-ts-mode))
 
 ;; (treesit-language-available-p 'cmake)
 ;; (treesit-language-available-p 'c)

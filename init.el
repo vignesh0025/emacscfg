@@ -62,13 +62,30 @@
   :ensure t ;; Make sure its installed if its not installed
   :init
   (doom-modeline-mode 1)
-  (setq doom-modeline-minor-modes t)
+  (setq doom-modeline-minor-modes nil)
   )
 
 (use-package rainbow-delimiters
   :ensure t
   :hook  (prog-mode . rainbow-delimiters-mode)
   )
+
+;; (use-package ivy
+;;   :ensure t
+;;   :config
+;; (setq ivy-use-virtual-buffers nil)
+;; (setq enable-recursive-minibuffers t)
+;; (setq ivy-count-format "(%d/%d) ")
+;; (ivy-mode)
+;; )
+
+;; (use-package swiper)
+
+;; (use-package counsel
+;;   :ensure t
+;;   :config
+;;   (counsel-mode)
+;;   )
 
 ;; Try IVY !!!!
 (use-package helm
@@ -104,17 +121,6 @@
 (require 'init-treesit)
 
 (require 'init-lsp)
-
-(use-package anti-zenburn-theme
-  :ensure t
-  :disabled
-  :config
-  (load-theme `anti-zenburn t) ; t is required to trust this theme without saying we need to trust this
-  )
-
-(use-package doom-themes
-  :disabled
-  :ensure t)
 
 (use-package spacemacs-theme
   :ensure t
@@ -207,7 +213,9 @@ _w_ whitespace-mode:   %`whitespace-mode
   "t"  '(:ignore t :which-key "Theme")
   "tt" '(load-theme :which-key "choose theme")
 
-  "SPC" '(switch-to-buffer :which-key "Go to buffer")
+  ; "SPC" '(switch-to-buffer :which-key "Go to buffer")
+  "SPC" '(helm-buffers-list :which-key "Go to buffer")
+  "b" '(helm-buffers-list :which-key "Go to buffer")
 
   "p" '(:ignore t :which-key "Projectile")
   "pm" '(projectile-command-map :which-key "Projectile-Commands")
@@ -219,8 +227,22 @@ _w_ whitespace-mode:   %`whitespace-mode
   "hz" '(hydra-zoom/body :which-key "Zoom")
   "hb" '(hydra-buffer/body :which-key "Navigate Buffer")
   "he" '(hydra-error/body :which-key "Errors")
+
+  "g" '(:ingore t :which-key "Git Operations")
+  "gi" '(git-gutter:statistic :which-key "GitGutter Statistics")
+  "gr" '(git-gutter:revert-hunk :which-key "GitGutter Revert Change")
+  "gd" '(git-gutter:popup-hunk :which-key "GitGutter Popup Change")
+  "ga" '(git-gutter:stage-hunk :which-key "GitGutter Stage Change")
+  "gs" '(magit-status :which-key "Git Status")
+  "gl" '(magit-log :which-key "Show log")
+  "gb" '(magit-blame :which-key "Blame File")
+
   )
 
 
 ;; I mindlessly press ESC, so stop me from wreaking havoc
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+(define-key evil-normal-state-map (kbd "] g") 'git-gutter:next-hunk)
+(define-key evil-normal-state-map (kbd "[ g") 'git-gutter:previous-hunk)
+
