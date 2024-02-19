@@ -17,11 +17,13 @@
   :init
   (setq evil-want-integration t) ;; TODO: Check if this are still applicable
   (setq evil-want-keybinding nil) ;; TODO: Check if this are still applicable
+  (setq evil-want-C-u-scroll t)
   :hook (evil-mode . vd/evil-hook)
   :config
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state) ;Exit to normal mode using C-g (EMACS World)
   (setq evil-symbol-word-search t) ;When using * and # consider _ as part of word
+  (evil-set-undo-system 'undo-redo)
   )
 
 ;; EVIL mode integration i.e. keybindings for other modes such as calender

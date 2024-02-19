@@ -106,7 +106,8 @@
   :ensure t
   :demand t
   :config
-  (setq projectile-git-command "fd . -0 --type f --color=never --strip-cwd-prefix")
+  (setq projectile-git-fd-args "-0 -E .git -tf --strip-cwd-prefix -c never")
+  (add-to-list 'projectile-globally-ignored-directories '"^\\.ccls-cache$")
   (projectile-mode +1)
   )
 
