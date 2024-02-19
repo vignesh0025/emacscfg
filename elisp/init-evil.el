@@ -1,6 +1,8 @@
 ;; The following will be always have Emacs mode by default
 (defun vd/evil-hook ()
+  (message "evil-mode-hook")
   (dolist (mode '(custom-mode
+		  magit-status-mode
 		  eshell-mode
 		  git-rebase-mode
 		  erc-mode
@@ -8,7 +10,9 @@
 		  circa-chat-mode
 		  sauron-mode
 		  term-mode))
-    (add-to-list 'evil-emacs-state-modes mode)))
+
+    (add-to-list 'evil-emacs-state-modes mode))
+  )
 
 ;; use C-Z to toggle evil and emacs mode
 (use-package evil
@@ -18,7 +22,9 @@
   (setq evil-want-integration t) ;; TODO: Check if this are still applicable
   (setq evil-want-keybinding nil) ;; TODO: Check if this are still applicable
   (setq evil-want-C-u-scroll t)
-  :hook (evil-mode . vd/evil-hook)
+  :hook
+  (evil-mode . vd/evil-hook)
+  (evil-local-mode . vd/evil-hook)
   :config
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state) ;Exit to normal mode using C-g (EMACS World)
