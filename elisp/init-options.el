@@ -28,7 +28,6 @@
 (custom-set-faces '(whitespace-tab ((t (:foreground "black")))))
 (add-hook 'prog-mode-hook 'whitespace-mode)
 (setq-default tab-width 4)
-(setq-local c-ts-mode-intent-offset 4)
 
 ;; Move Custom-Set-Variables to Different File
 (setq custom-file (concat user-emacs-directory "custom-set-variables.el"))
@@ -53,5 +52,8 @@
 
 ;; Use "_" as part of word
 (modify-syntax-entry ?_ "w")
+
+(global-tab-line-mode)
+(tab-bar-mode)
 
 (provide 'init-options)

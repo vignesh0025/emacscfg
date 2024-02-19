@@ -1,4 +1,11 @@
 
+(add-hook 'c-ts-mode-hook
+		  (lambda ()
+		  (message "setting c indent mode")
+		  (setq c-ts-mode-indent-offset 4)
+		  (setq c-ts-mode-indent-style "c-vd-style")
+		  ))
+
 (defun vd/treesit-config ()
   (setq treesit-language-source-alist
 	'((bash "https://github.com/tree-sitter/tree-sitter-bash")
@@ -15,6 +22,7 @@
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
   (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
   (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
+
 )
 
 (if (treesit-available-p)
