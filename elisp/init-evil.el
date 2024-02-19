@@ -21,6 +21,7 @@
   :config
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state) ;Exit to normal mode using C-g (EMACS World)
+  (setq evil-symbol-word-search t) ;When using * and # consider _ as part of word
   )
 
 ;; EVIL mode integration i.e. keybindings for other modes such as calender

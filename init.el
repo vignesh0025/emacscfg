@@ -106,6 +106,7 @@
   :ensure t
   :demand t
   :config
+  (setq projectile-git-command "fd . -0 --type f --color=never --strip-cwd-prefix")
   (projectile-mode +1)
   )
 

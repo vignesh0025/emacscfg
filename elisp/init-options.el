@@ -1,8 +1,20 @@
 ; Font options
-(add-to-list 'default-frame-alist '(font . "Hack-11"))
+
+; Read from init-override.el if available
+(setq def-font-face (if (boundp 'vd-font-family) vd-font-family "Hack"))
+(setq def-font-sz (if (boundp 'vd-font-sz) vd-font-sz 11))
+(setq def-font-height (* def-font-sz 10))
+
+(setq font-face-size (format "%s-%d" def-font-face def-font-sz))
+
+; (setq test-list nil)
+; (add-to-list 'test-list `(font . ,font-face-size))
+
+; backquote(`) is required below to add-to-list. Then only comma(,) will replace font-face-size with its value
+(add-to-list 'default-frame-alist `(font . ,font-face-size))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(set-face-attribute 'default nil :font "Hack" :height (if (boundp 'vd-font-sz) vd-font-sz 110))
+(set-face-attribute 'default nil :font def-font-face :height def-font-height)
 
 (add-hook 'emacs-startup-hook
 	  (lambda ()
@@ -12,8 +24,11 @@
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'save-place-mode)
 
-(setq whitespace-style '(tab-mark)) ; Show only Tab
+(setq whitespace-style '(tab-mark face tabs)) ; Show only Tab
+(custom-set-faces '(whitespace-tab ((t (:foreground "black")))))
 (add-hook 'prog-mode-hook 'whitespace-mode)
+(setq-default tab-width 4)
+(setq-local c-ts-mode-intent-offset 4)
 
 ;; Move Custom-Set-Variables to Different File
 (setq custom-file (concat user-emacs-directory "custom-set-variables.el"))
@@ -34,5 +49,9 @@
 (when (fboundp 'global-so-long-mode)
   (global-so-long-mode))
 
+(pixel-scroll-precision-mode 1)
+
+;; Use "_" as part of word
+(modify-syntax-entry ?_ "w")
 
 (provide 'init-options)
