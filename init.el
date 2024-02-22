@@ -248,6 +248,12 @@ _w_ whitespace-mode:   %`whitespace-mode
   "l"  '(:ignore t :which-key "LSP Operations")
   "lr" '(lsp-workspace-restart :which-key  "Restart LSP")
   "lh" '(lsp-describe-session :which-key "LSP Describe Session")
+
+  "e"  '(:ignore t :which-key "Flycheck Operations")
+  "el" '(flycheck-list-errors :which-key "List errors")
+  "es" '(flycheck-verify-setup :which-key "Verify current enabled/supported error checker")
+  "ec" '(flycheck-verify-checker :which-key "Verify checker working")
+  "ed" '(flycheck-describe-checker :which-key "Describe the checker")
   )
 
 
@@ -256,4 +262,6 @@ _w_ whitespace-mode:   %`whitespace-mode
 
 (define-key evil-normal-state-map (kbd "] g") 'git-gutter:next-hunk)
 (define-key evil-normal-state-map (kbd "[ g") 'git-gutter:previous-hunk)
+(define-key evil-normal-state-map (kbd "[ f") 'flycheck-previous-error)
+(define-key evil-normal-state-map (kbd "] f") 'flycheck-next-error)
 
