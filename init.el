@@ -133,9 +133,17 @@
 (use-package spacemacs-theme
   :ensure t
   :config
-  (load-theme `spacemacs-light t)
-  (load-theme `spacemacs-dark t)
- )
+  ;; (load-theme `spacemacs-light t)
+  ;; (load-theme `spacemacs-dark t)
+  )
+
+(use-package  color-theme-modern
+  :ensure t
+  :config
+  (load-theme `rotor t)
+  (load-theme `gray30 t)
+  (load-theme `jedit-grey t)
+  )
 
 ;; Keymap related things in one place
 (use-package which-key
