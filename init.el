@@ -268,6 +268,9 @@ _w_ whitespace-mode:   %`whitespace-mode
 ;; I mindlessly press ESC, so stop me from wreaking havoc
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
+(define-key evil-normal-state-map (kbd "C-p") 'helm-projectile-find-file)
+(define-key evil-normal-state-map (kbd "M-p") 'switch-to-buffer)
+
 (define-key evil-normal-state-map (kbd "] g") 'git-gutter:next-hunk)
 (define-key evil-normal-state-map (kbd "[ g") 'git-gutter:previous-hunk)
 (define-key evil-normal-state-map (kbd "[ f") 'flycheck-previous-error)
