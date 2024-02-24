@@ -270,6 +270,8 @@ _w_ whitespace-mode:   %`whitespace-mode
   "es" '(flycheck-verify-setup :which-key "Verify current enabled/supported error checker")
   "ec" '(flycheck-verify-checker :which-key "Verify checker working")
   "ed" '(flycheck-describe-checker :which-key "Describe the checker")
+
+  "s"  '(swiper :which-key "Swiper")
   )
 
 
