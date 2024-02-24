@@ -1,3 +1,6 @@
+;;; package --- Summary:
+;;; Commentary:
+;;; Code:
 (use-package lsp-mode
   :ensure t
   :commands lsp
@@ -9,7 +12,11 @@
 
 (use-package lsp-ui
   :ensure t
-  :commands lsp-ui-mode)
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-sideline-show-hover t)
+  (setq lsp-ui-sideline-show-code-actions t)
+  )
 
 (use-package ccls
   :ensure t
@@ -26,7 +33,13 @@
   (add-hook 'after-init-hook #'global-flycheck-mode))
 
 (use-package company
-    :ensure t)
+    :after lsp-mode
+    :ensure t
+	:config
+	(setq company-minimum-prefix-length 1
+      company-idle-delay 0.0) ;; default is 0.2
+	)
 
 (provide 'init-lsp)
+;;; init-lsp.el ends here
 

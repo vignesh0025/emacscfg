@@ -62,7 +62,6 @@
   :ensure t ;; Make sure its installed if its not installed
   :init
   (doom-modeline-mode 1)
-  (setq doom-modeline-minor-modes nil)
   )
 
 (use-package rainbow-delimiters
@@ -128,6 +127,10 @@
 
 (require 'init-treesit)
 
+;; Delete lsp-mode packages to make sure below thing is taken into effect 1st time
+(setenv "LSP_USE_PLISTS" "true")
+(setq lsp-use-plists t)
+;; lsp-doctor can be used to check the lsp functions
 (require 'init-lsp)
 
 (use-package spacemacs-theme
@@ -256,6 +259,8 @@ _w_ whitespace-mode:   %`whitespace-mode
   "l"  '(:ignore t :which-key "LSP Operations")
   "lr" '(lsp-workspace-restart :which-key  "Restart LSP")
   "lh" '(lsp-describe-session :which-key "LSP Describe Session")
+  "ll" '(helm-imenu :which-key "Code Outline")
+  "la" '(lsp-execute-code-action :which-key "Code Action")
 
   "e"  '(:ignore t :which-key "Flycheck Operations")
   "el" '(flycheck-list-errors :which-key "List errors")

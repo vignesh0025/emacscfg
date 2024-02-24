@@ -1,6 +1,5 @@
 ;; The following will be always have Emacs mode by default
 (defun vd/evil-hook ()
-  (message "evil-mode-hook")
   (dolist (mode '(custom-mode
 		  magit-status-mode
 		  eshell-mode

@@ -19,7 +19,9 @@
     (message "overriding...")
   (message "no override"))
 
+; Optimizations for efficient lsp-mode
 (setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 2048 1024))
 
 (setq package-enable-at-startup nil)
 
@@ -36,7 +38,7 @@
 
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(set-fringe-mode 10) ; Give some breathing space
+(set-fringe-mode 0)
 
 (message user-emacs-directory)
 
