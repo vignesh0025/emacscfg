@@ -123,6 +123,9 @@
 (use-package helm-xref
   :ensure t)
 
+(use-package swiper-helm
+  :ensure t)
+
 (require 'init-git)
 
 (require 'init-treesit)
