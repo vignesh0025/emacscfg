@@ -55,6 +55,7 @@
   :hook (company-mode . company-box-mode))
 
 (use-package yasnippet
+  :defer t
   :ensure t
   :config
   (yas-global-mode 1)
@@ -62,7 +63,12 @@
 
 (use-package yasnippet-snippets
   :ensure t
+  :defer t
   :after yasnippet)
+
+;; TODO: yatemplate and auto-insert-mode
+;; https://www.gnu.org/software/emacs/manual/html_node/autotype/Autoinserting.html
+;; https://github.com/mineo/yatemplate
 
 (provide 'init-lsp)
 ;;; init-lsp.el ends here
