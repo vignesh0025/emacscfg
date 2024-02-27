@@ -1,45 +1,14 @@
-(setq inhibit-startup-message t)
-
-
-;; C-x z (OR) M-x repeat RET -> repeats last operation
-;; M-g g (OR) M-g M-g -> goto line:
-
-;; minibuffer-electric-default-mode -> Hides default argument in minibuffer, if we write some entry to it
 ;; delete-trailing-whitespace
 ;; delete-empty-blanklines
 
-;; C-x C-x -> highlight last selected region (same as "gv" in vim)
-;; When region is selected: C-x C-c -> moves to start/end of slection
-(defvar better-gc-cons-threshold 134217728); 128mb
-
+;; file-name-handler-alist-original comes from early-init.el
 (add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold better-gc-cons-threshold)
-            (setq file-name-handler-alist file-name-handler-alist-original)
-            (makunbound 'file-name-handler-alist-original)))
-
-;; Auto Garbage Collection
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (if (boundp 'after-focus-change-function)
-                (add-function :after after-focus-change-function
-                              (lambda ()
-                                (unless (frame-focus-state)
-                                  (garbage-collect))))
-              (add-hook 'after-focus-change-function 'garbage-collect))
-            (defun gc-minibuffer-setup-hook ()
-              (setq gc-cons-threshold (* better-gc-cons-threshold 2)))
-
-            (defun gc-minibuffer-exit-hook ()
-              (garbage-collect)
-              (setq gc-cons-threshold better-gc-cons-threshold))
-
-            (add-hook 'minibuffer-setup-hook #'gc-minibuffer-setup-hook)
-            (add-hook 'minibuffer-exit-hook #'gc-minibuffer-exit-hook)))
+		  (lambda ()
+			(setq file-name-handler-alist file-name-handler-alist-original)
+			(makunbound 'file-name-handler-alist-original)
+			))
 
 (require 'init-options)
-
-(require 'init-modemap)
 
 (require 'init-elpaca)
 
@@ -69,23 +38,23 @@
   :hook  (prog-mode . rainbow-delimiters-mode)
   )
 
-;; (use-package ivy
-;;   :ensure t
-;;   :config
-;; (setq ivy-use-virtual-buffers nil)
-;; (setq enable-recursive-minibuffers t)
-;; (setq ivy-count-format "(%d/%d) ")
-;; (ivy-mode)
-;; )
-
-;; (use-package swiper)
-
-;; (use-package counsel
-;;   :ensure t
-;;   :config
-;;   (counsel-mode)
-;;   )
-
+;; ;; (use-package ivy
+;; ;;   :ensure t
+;; ;;   :config
+;; ;; (setq ivy-use-virtual-buffers nil)
+;; ;; (setq enable-recursive-minibuffers t)
+;; ;; (setq ivy-count-format "(%d/%d) ")
+;; ;; (ivy-mode)
+;; ;; )
+;;
+;; ;; (use-package swiper)
+;;
+;; ;; (use-package counsel
+;; ;;   :ensure t
+;; ;;   :config
+;; ;;   (counsel-mode)
+;; ;;   )
+;;
 ;; Try IVY !!!!
 (use-package helm
   :ensure t
@@ -153,6 +122,7 @@
 
 ;; Keymap related things in one place
 (use-package which-key
+  :defer t
   :ensure t
   :init (which-key-mode)
   :diminish which-key-mode
@@ -162,6 +132,8 @@
 
 (use-package general
   :ensure t
+  :init
+  (general-auto-unbind-keys)
   :config
   (general-evil-setup t)
 
@@ -172,19 +144,21 @@
   )
 
 (use-package hydra
+  :defer t
   :ensure t
   )
 
-(use-package helpful
-  :ensure t
-  :config
-  (global-set-key (kbd "C-h f") #'helpful-callable)
-  (global-set-key (kbd "C-h v") #'helpful-variable)
-  (global-set-key (kbd "C-h k") #'helpful-key)
-  (global-set-key (kbd "C-h x") #'helpful-command)
-  (global-set-key (kbd "C-h o") #'helpful-at-point)
-  )
-
+;; Disabled due to https://github.com/Wilfred/helpful/issues/329
+;; (use-package helpful
+;;   :ensure t
+;;   :config
+;;   (global-set-key (kbd "C-h f") #'helpful-callable)
+;;   (global-set-key (kbd "C-h v") #'helpful-variable)
+;;   (global-set-key (kbd "C-h k") #'helpful-key)
+;;   (global-set-key (kbd "C-h x") #'helpful-command)
+;;   (global-set-key (kbd "C-h o") #'helpful-at-point)
+;;   )
+;;
 (elpaca-wait)
 
 

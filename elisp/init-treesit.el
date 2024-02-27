@@ -33,4 +33,6 @@
 (use-package verilog-ts-mode
   :ensure t)
 
+(require 'init-modemap)
+
 (provide 'init-treesit)

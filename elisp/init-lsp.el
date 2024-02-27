@@ -1,6 +1,7 @@
 ;;; package --- Summary:
 ;;; Commentary:
 ;;; Code:
+
 (use-package lsp-mode
   :ensure t
   :commands lsp
@@ -8,6 +9,7 @@
   (setq lsp-enable-snippet nil)
   (setq lsp-enable-file-watches t)
   (setq lsp-file-watch-threshold 5000)
+  (setq lsp-modeline-code-actions-mode t)
   )
 
 (use-package lsp-ui
@@ -30,15 +32,37 @@
 (use-package flycheck
   :ensure t
   :config
-  (add-hook 'after-init-hook #'global-flycheck-mode))
+  ;; This tells the flycheck to inherit whatever the variable load-path us having
+  ;; Avoid "cannot load open file error"
+  (setq flycheck-emacs-lisp-load-path 'inherit)
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  )
 
 (use-package company
     :after lsp-mode
     :ensure t
 	:config
+	(add-to-list 'company-backends '(company-yasnippet company-capf))
 	(setq company-minimum-prefix-length 1
-      company-idle-delay 0.0) ;; default is 0.2
+		  company-idle-delay 0.0) ;; default is 0.2
+	(add-hook 'after-init-hook 'global-company-mode)
+	(setq company-tooltip-align-annotations t)
 	)
+
+; Provides icons for Company-Mode popup like LSP
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
+
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1)
+  )
+
+(use-package yasnippet-snippets
+  :ensure t
+  :after yasnippet)
 
 (provide 'init-lsp)
 ;;; init-lsp.el ends here
