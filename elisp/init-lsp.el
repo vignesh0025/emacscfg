@@ -21,6 +21,7 @@
   )
 
 (use-package ccls
+  :disabled
   :ensure t
   :config
   (if (bound-and-true-p vd-ccls-exec)

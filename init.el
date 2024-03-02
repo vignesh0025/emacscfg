@@ -115,9 +115,14 @@
 (use-package  color-theme-modern
   :ensure t
   :config
-  (load-theme `rotor t)
-  (load-theme `gray30 t)
-  (load-theme `jedit-grey t)
+  ;; (load-theme `rotor t)
+  ;; (load-theme `gray30 t)
+  ;; (load-theme `jedit-grey t)
+  )
+
+(use-package doom-themes
+  :config
+  (load-theme `doom-palenight t)
   )
 
 ;; Keymap related things in one place

@@ -53,7 +53,7 @@
 ; backquote(`) is required below to add-to-list. Then only comma(,) will replace font-face-size with its value
 (add-to-list 'default-frame-alist `(font . ,font-face-size))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(add-to-list 'default-frame-alist '(alpha-background . 0.9))
+(add-to-list 'default-frame-alist '(alpha-background . 1.0))
 
 (require 'init-gc)
 
