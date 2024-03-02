@@ -5,6 +5,9 @@
 (use-package lsp-mode
   :ensure t
   :commands lsp
+  :hook (c-ts-mode . lsp-deferred)
+  :hook (c-or-c++-ts-mode . lsp-deferred)
+  :hook (python-ts-mode . lsp-deferred)
   :config
   (setq lsp-enable-snippet nil)
   (setq lsp-enable-file-watches t)
@@ -14,6 +17,7 @@
 
 (use-package lsp-ui
   :ensure t
+  :after lsp-mode
   :commands lsp-ui-mode
   :config
   (setq lsp-ui-sideline-show-hover t)
