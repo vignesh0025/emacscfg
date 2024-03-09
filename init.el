@@ -125,6 +125,15 @@
   (load-theme `doom-palenight t)
   )
 
+(use-package nyan-mode
+  :config
+  (nyan-mode)
+  )
+
+(use-package dts-mode
+  :config
+  )
+
 ;; Keymap related things in one place
 (use-package which-key
   :defer t
