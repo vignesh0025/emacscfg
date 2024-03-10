@@ -73,13 +73,13 @@
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs)
   )
 
-(use-package ivy-prescient
-  :after ivy
-  :init
-  (setq ivy-prescient-retain-classic-highlighting t)
-  :config
-  (ivy-prescient-mode)
-  )
+;; (use-package ivy-prescient
+;;   :after ivy
+;;   :init
+;;   (setq ivy-prescient-retain-classic-highlighting t)
+;;   :config
+;;   (ivy-prescient-mode)
+;;   )
 
 (use-package swiper)
 
