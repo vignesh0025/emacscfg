@@ -33,41 +33,60 @@
   (doom-modeline-mode 1)
   )
 
+;; (use-package spaceline
+;;   :ensure t ;; Make sure its installed if its not installed
+;;   :init
+;;   (spaceline-emacs-theme)
+;;   (spaceline-toggle-minor-modes-off)
+;;   )
+
+
 (use-package rainbow-delimiters
   :ensure t
   :hook  (prog-mode . rainbow-delimiters-mode)
   )
 
-;; ;; (use-package ivy
-;; ;;   :ensure t
-;; ;;   :config
-;; ;; (setq ivy-use-virtual-buffers nil)
-;; ;; (setq enable-recursive-minibuffers t)
-;; ;; (setq ivy-count-format "(%d/%d) ")
-;; ;; (ivy-mode)
-;; ;; )
-;;
-;; ;; (use-package swiper)
-;;
-;; ;; (use-package counsel
-;; ;;   :ensure t
-;; ;;   :config
-;; ;;   (counsel-mode)
-;; ;;   )
-;;
-;; Try IVY !!!!
-(use-package helm
+(use-package ivy
   :ensure t
-  :init
-  (setq completion-styles '(flex))
   :config
-  (helm-mode 1)
-  (global-set-key (kbd "M-x") #'helm-M-x)
-  (global-set-key (kbd "C-x C-f") #'helm-find-files)
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+(setq ivy-count-format "(%d/%d) ")
+(ivy-mode)
+)
+
+(use-package ivy-hydra
+  :after ivy)
+
+(use-package ivy-rich
+  :after ivy
+  :init
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+  :config
+  (ivy-rich-mode)
   )
 
-(use-package helm-rg
+(use-package ivy-xref
+  :init
+  (when (>= emacs-major-version 27)
+    (setq xref-show-definitions-function #'ivy-xref-show-defs))
+  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs)
+  )
+
+(use-package ivy-prescient
+  :after ivy
+  :init
+  (setq ivy-prescient-retain-classic-highlighting t)
+  :config
+  (ivy-prescient-mode)
+  )
+
+(use-package swiper)
+
+(use-package counsel
   :ensure t
+  :config
+  (counsel-mode)
   )
 
 (use-package projectile
@@ -79,21 +98,39 @@
   (projectile-mode +1)
   )
 
-(use-package helm-projectile
-  :ensure t
-  :demand t
-  :config
-  (helm-projectile-on)
+(use-package counsel-projectile
   )
 
-(use-package helm-themes
-  :ensure t)
+;; ;; Try IVY !!!!
+;; (use-package helm
+;;   :ensure t
+;;   :init
+;;   (setq completion-styles '(flex))
+;;   :config
+;;   (helm-mode 1)
+;;   (global-set-key (kbd "M-x") #'helm-M-x)
+;;   (global-set-key (kbd "C-x C-f") #'helm-find-files)
+;;   )
 
-(use-package helm-xref
-  :ensure t)
+;; (use-package helm-rg
+;;   :ensure t
+;;   )
 
-(use-package swiper-helm
-  :ensure t)
+;; (use-package helm-projectile
+;;   :ensure t
+;;   :demand t
+;;   :config
+;;   (helm-projectile-on)
+;;   )
+
+;; (use-package helm-themes
+;;   :ensure t)
+
+;; (use-package helm-xref
+;;   :ensure t)
+
+;; (use-package swiper-helm
+;;   :ensure t)
 
 (require 'init-git)
 
@@ -224,12 +261,12 @@ _w_ whitespace-mode:   %`whitespace-mode
   "tt" '(load-theme :which-key "choose theme")
 
   ; "SPC" '(switch-to-buffer :which-key "Go to buffer")
-  "SPC" '(helm-buffers-list :which-key "Go to buffer")
-  "b" '(helm-buffers-list :which-key "Go to buffer")
+  "SPC" '(switch-to-buffer :which-key "Go to buffer")
+  "b" '(switch-to-buffer :which-key "Go to buffer")
 
   "p" '(:ignore t :which-key "Projectile")
   "pm" '(projectile-command-map :which-key "Projectile-Commands")
-  "pp"  '(helm-projectile-find-file :which-key "Find File Recursive")
+  "pp"  '(counsel-projectile-find-file :which-key "Find File Recursive")
   "pf"  '(helm-find-files :which-key "Find File")
 
   "h" '(:ignore t :which-key "Hydra Operations")
@@ -250,7 +287,7 @@ _w_ whitespace-mode:   %`whitespace-mode
   "l"  '(:ignore t :which-key "LSP Operations")
   "lr" '(lsp-workspace-restart :which-key  "Restart LSP")
   "lh" '(lsp-describe-session :which-key "LSP Describe Session")
-  "ll" '(helm-imenu :which-key "Code Outline")
+  "ll" '(counsel-imenu :which-key "Code Outline")
   "la" '(lsp-execute-code-action :which-key "Code Action")
 
   "e"  '(:ignore t :which-key "Flycheck Operations")
@@ -266,7 +303,7 @@ _w_ whitespace-mode:   %`whitespace-mode
 ;; I mindlessly press ESC, so stop me from wreaking havoc
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-(define-key evil-normal-state-map (kbd "C-p") 'helm-projectile-find-file)
+(define-key evil-normal-state-map (kbd "C-p") 'counsel-projectile-find-file)
 (define-key evil-normal-state-map (kbd "M-p") 'switch-to-buffer)
 
 (define-key evil-normal-state-map (kbd "] g") 'git-gutter:next-hunk)
